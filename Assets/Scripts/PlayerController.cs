@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using static Unity.VisualScripting.Member;
 
 public class PlayerController : MonoBehaviour
@@ -11,6 +12,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float speed = 10f;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float force = 10f;
+    [SerializeField] private double damage = 0;
+    [SerializeField] private float fuel = 0;
+    [SerializeField] private float capacity = 100;
+    [SerializeField] private int labs = 0;
 
     public Vector3[] Points;
 
@@ -70,6 +75,8 @@ public class PlayerController : MonoBehaviour
         {
             ManualMode();
         }
+
+        ResetScence();
     }
 
     void AutoMode()
@@ -149,6 +156,58 @@ public class PlayerController : MonoBehaviour
             
         }
         currentGear = Mathf.Clamp(currentGear, 1, 6);
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.CompareTag("RedFuel")){
+            if (fuel < capacity)
+            {
+                fuel += 25;
+
+            }
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.CompareTag("BlueFuel")){
+            
+                capacity += 10;
+            Destroy(collision.gameObject);
+
+        }
+        if (collision.CompareTag("SmallBox"))
+        {
+
+            damage *= 0.03;
+            Destroy(collision.gameObject);
+
+        }
+        if (collision.CompareTag("LargeBox"))
+        {
+
+           damage = 0;
+            Destroy(collision.gameObject);
+
+        }
+
+        if (collision.CompareTag("CollisionObject"))
+        {
+            damage += 5;
+            Destroy(collision.gameObject);
+        }
+        if (collision.CompareTag("Gate"))
+        {
+            labs += 1;
+        }
+
+    }
+
+    private void ResetScence()
+    {
+        if (damage >= 100)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
 

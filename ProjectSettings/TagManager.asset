@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Target
+  - RedFuel
+  - BlueFuel
+  - SmallBox
+  - LargeBox
+  - CollisionObject
+  - Gate
   layers:
   - Default
   - TransparentFX
